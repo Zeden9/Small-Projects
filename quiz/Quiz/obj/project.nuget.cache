@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "d/y2xvm+9lRAKo8PbecRbjzXXvf59MH3p2T1fNqjlZjgbHuo3NEBpNQGe4i36iWPZsRhShRge9F1uV79j3WFsw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Mateusz\\Documents\\GitHub\\Small-Projects\\quiz\\Quiz\\Quiz.vcxproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Mateusz\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.22000.27\\microsoft.windows.sdk.net.ref.10.0.22000.27.nupkg.sha512"
+  ],
+  "logs": []
+}

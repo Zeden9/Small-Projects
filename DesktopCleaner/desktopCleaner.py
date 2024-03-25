@@ -1,8 +1,9 @@
 import os
 import shutil
 from datetime import date as d
+import gui 
 
-trash = ["png", "jpg", "mp4", "pdf", "gif", "ico", "bat", "txt", "srt", "mp3", "doc", "docs", "docx", "avi", "exe", "py"]
+trash = ["h","cpp","prg", "rzk","msi","zip", "7zip", "rar","png", "jpg", "mp4", "pdf", "gif", "ico", "bat", "txt", "srt", "mp3", "doc", "docs", "docx", "avi", "exe", "py"]
 
 if __name__ == "__main__":
     #desktop = f"{os.path.expanduser('~')}\desktop" #Setting directory to current user's desktop

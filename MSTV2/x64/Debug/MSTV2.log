@@ -1,0 +1,3 @@
+﻿  functions.cpp
+C:\Users\Mateusz\Documents\GitHub\9c79dd4a-gr01-repo\project\MinimumSpanningTree\functions.cpp(89,26): warning C4101: "tempRoot": lokalna zmienna, do której nie istnieje odwołanie
+  MSTV2.vcxproj -> C:\Users\Mateusz\Documents\GitHub\Small-Projects\MSTV2\x64\Debug\MSTV2.exe
