@@ -4,11 +4,13 @@ import os
 class Ship:
     size:int
     x:chr
-    y:chr
+    y:int
     orientation:chr
     sunk = False
 
     def __init__(self, x, y, size, orientation):
+        if (y > 9 or y < 0 or ord(x) < 97 or ord(x) > 106):
+            return False
         self.x = x
         self.y = y
         self.size = size
@@ -21,7 +23,58 @@ class Board:
     ships = []
     blocked_spots = []
 
+    def cords_taken(self, cords):
+        if cords in self.blocked_spots:
+            return True
+        else:
+            return False
+        
+    def block_position(self, ship:Ship):
+
+        if ship.orientation.lower() == 'n':
+            self.blocked_spots.append([ship.x, ship.y-1])
+            self.blocked_spots.append([ship.x, ship.y+ship.size])
+            for n in range(ship.size):
+                self.blocked_spots.append([ship.x, ship.y+n])
+                self.blocked_spots.append([chr(ord(ship.x)-1), ship.y+n])
+                self.blocked_spots.append([chr(ord(ship.x)+1), ship.y+n])
+            
+
+        elif ship.orientation.lower() == 's':
+            self.blocked_spots.append([ship.x, ship.y+1])
+            self.blocked_spots.append([ship.x, ship.y-ship.size])
+            for n in range(ship.size):
+                self.blocked_spots.append([ship.x, ship.y-n])
+                self.blocked_spots.append([chr(ord(ship.x)-1), ship.y-n])
+                self.blocked_spots.append([chr(ord(ship.x)+1), ship.y-n])
+
+
+        elif ship.orientation.lower() == 'w':
+            self.blocked_spots.append([chr(ord(ship.x)+1), ship.y])
+            self.blocked_spots.append([chr(ord(ship.x)-ship.size), ship.y])
+            for n in range(ship.size):
+                self.blocked_spots.append([chr(ord(ship.x)-n), ship.y]) 
+                self.blocked_spots.append([chr(ord(ship.x)-n), ship.y-1])
+                self.blocked_spots.append([chr(ord(ship.x)-n), ship.y+1])
+
+        elif ship.orientation.lower() == 'e':
+            self.blocked_spots.append([chr(ord(ship.x)-1), ship.y])
+            self.blocked_spots.append([chr(ord(ship.x)+ship.size), ship.y])
+            for n in range(ship.size):
+                self.blocked_spots.append([chr(ord(ship.x)+n), ship.y])
+                self.blocked_spots.append([chr(ord(ship.x)+n), ship.y-1])
+                self.blocked_spots.append([chr(ord(ship.x)+n), ship.y+1])
+        return
+
+    def detect_collision(self, cords, size, orientation):
+        if self.cords_taken(cords):
+            return True
+ 
+            
+
+
     def create_fleet(self):
+        os.system('cls')
         BoardCreation = True
         while BoardCreation:
             if(len(self.ships) == 0): #0
@@ -36,15 +89,20 @@ class Board:
             elif(len(self.ships) > 5 and len(self.ships) <= 9): # 6 7 8 9
                 masts = "one-mast"
                 size = 1
-
             prompt = f"Input coordinates and orientation of your {masts} ship (e.g. A5 N):\n"
             data = input(prompt).lower()
             match = re.search('[a-j][0-9][nesw]', data)
             if match:
-                if not 
                 x, y, orientation = match.group().split()[0]
-                new_ship = Ship(x, y, size, orientation)
-                self.ships.append(new_ship)
+                y = int(y)
+                if not self.detect_collision([x,y],size,orientation):
+                    new_ship = Ship(x, y, size, orientation)
+                    self.block_position(new_ship)
+                    self.ships.append(new_ship)
+                    print(f"\n\nShips:{self.ships}\nBlocked:{self.blocked_spots}")
+                else:
+                    print("The coordinates are already taken.")
+                    continue
             else:
                 print("Invalid input. Please provide coordinates and orientation in the correct format.")
                 continue
