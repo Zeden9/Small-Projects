@@ -30,40 +30,59 @@ class Board:
             return False
         
     def block_position(self, ship:Ship):
+        orientation = ship.orientation.lower()
+        x = ship.x
+        y = ship.y
+        size = ship.size
+        delta = 0
 
-        if ship.orientation.lower() == 'n':
-            self.blocked_spots.append([ship.x, ship.y-1])
-            self.blocked_spots.append([ship.x, ship.y+ship.size])
-            for n in range(ship.size):
-                self.blocked_spots.append([ship.x, ship.y+n])
-                self.blocked_spots.append([chr(ord(ship.x)-1), ship.y+n])
-                self.blocked_spots.append([chr(ord(ship.x)+1), ship.y+n])
+        directions = {
+            'n' : [(0,delta), (-1,delta), (1,delta)],
+            's' : [(0,-delta), (-1,-delta), (1,-delta)],
+            'w' : [(delta,0), (delta,-1), (delta, +1)],
+            'e' : [(-delta,0), (-delta,-1), (-delta, +1)]
+        }
+
+        if orientation == 'n':
+            self.blocked_spots.extend([ [x, y-1], [x, y+size] ])
+        elif orientation == 's':
+            self.blocked_spots.extend([ [x, y+1], [x, y-size] ])
+        elif orientation == 'w':
+            self.blocked_spots.extend([ [chr(ord(x)+1), y], [chr(ord(x)-size), y] ])
+        elif orientation == 'e':
+            self.blocked_spots.extend([ [chr(ord(x)-1), y], [chr(ord(x)+size), y] ])
+     
+        
+        for dx, dy in directions[orientation]:
+            for n in range(size):
+                self.blocked_spots.append([chr(ord(x) + (n * dx)), y + (n * dy)])
+
             
 
-        elif ship.orientation.lower() == 's':
-            self.blocked_spots.append([ship.x, ship.y+1])
-            self.blocked_spots.append([ship.x, ship.y-ship.size])
-            for n in range(ship.size):
-                self.blocked_spots.append([ship.x, ship.y-n])
-                self.blocked_spots.append([chr(ord(ship.x)-1), ship.y-n])
-                self.blocked_spots.append([chr(ord(ship.x)+1), ship.y-n])
+        # elif orientation == 's':
+        #     self.blocked_spots.extend([x, y+1], [x, y-size])
+
+        #     for n in range(size):
+        #         self.blocked_spots.append([x, y-n])
+        #         self.blocked_spots.append([chr(ord(x)-1), y-n])
+        #         self.blocked_spots.append([chr(ord(x)+1), y-n])
 
 
-        elif ship.orientation.lower() == 'w':
-            self.blocked_spots.append([chr(ord(ship.x)+1), ship.y])
-            self.blocked_spots.append([chr(ord(ship.x)-ship.size), ship.y])
-            for n in range(ship.size):
-                self.blocked_spots.append([chr(ord(ship.x)-n), ship.y]) 
-                self.blocked_spots.append([chr(ord(ship.x)-n), ship.y-1])
-                self.blocked_spots.append([chr(ord(ship.x)-n), ship.y+1])
+        # elif orientation == 'w':
+        #     self.blocked_spots.extend([chr(ord(x)+1), y], [chr(ord(x)-size), y])
 
-        elif ship.orientation.lower() == 'e':
-            self.blocked_spots.append([chr(ord(ship.x)-1), ship.y])
-            self.blocked_spots.append([chr(ord(ship.x)+ship.size), ship.y])
-            for n in range(ship.size):
-                self.blocked_spots.append([chr(ord(ship.x)+n), ship.y])
-                self.blocked_spots.append([chr(ord(ship.x)+n), ship.y-1])
-                self.blocked_spots.append([chr(ord(ship.x)+n), ship.y+1])
+        #     for n in range(size):
+        #         self.blocked_spots.append([chr(ord(x)-n), y]) 
+        #         self.blocked_spots.append([chr(ord(x)-n), y-1])
+        #         self.blocked_spots.append([chr(ord(x)-n), y+1])
+
+        # elif orientation == 'e':
+        #     self.blocked_spots.extend([chr(ord(x)-1), y], [chr(ord(x)+size), y])
+
+        #     for n in range(size):
+        #         self.blocked_spots.append([chr(ord(x)+n), y])
+        #         self.blocked_spots.append([chr(ord(x)+n), y-1])
+        #         self.blocked_spots.append([chr(ord(x)+n), y+1])
         return
 
     def detect_collision(self, cords, size, orientation):
