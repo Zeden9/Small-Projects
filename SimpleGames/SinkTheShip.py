@@ -34,8 +34,6 @@ class Board:
         x = ship.x
         y = ship.y
         size = ship.size
-        delta = 0
-
         directions = {
             'n' : [(0,-1), (-1,-1), (1,-1)],
             's' : [(0,1), (-1,1), (1,1)],
