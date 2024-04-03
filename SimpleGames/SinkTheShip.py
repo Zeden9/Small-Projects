@@ -7,14 +7,29 @@ class Ship:
     y:int
     orientation:chr
     sunk = False
+    sections_hit = []
+    sections = []
 
     def __init__(self, x, y, size, orientation):
-        if (y > 9 or y < 0 or ord(x) < 97 or ord(x) > 106):
-            return False
+        if (y >= 9 or y <= 0 or ord(x) < 97 or ord(x) > 106):
+            pass
         self.x = x
         self.y = y
         self.size = size
         self.orientation = orientation
+        self.sections = []
+        directions = {
+            'n':(0,-1),
+            's':(0,1),
+            'e':(1,0),
+            'w':(-1,0)
+        }
+        dx = directions[orientation][0]
+        dy = directions[orientation][1]
+        for n in range(size):
+            new_cords = [chr(ord(x)+(n*dx)), y+(n*dy)]
+            self.sections.append(new_cords)
+
         print("Ship created succesfully")
 
     
@@ -23,17 +38,21 @@ class Board:
     ships = []
     blocked_spots = []
 
-    def cords_taken(self, cords):
+    #def cords_beyond_border(self, cords):
+
+
+    def cords_available(self, cords):
         if cords in self.blocked_spots:
-            return True
-        else:
             return False
+        else:
+            return True
         
     def block_position(self, ship:Ship):
         orientation = ship.orientation.lower()
         x = ship.x
         y = ship.y
         size = ship.size
+
         directions = {
             'n' : [(0,-1), (-1,-1), (1,-1)],
             's' : [(0,1), (-1,1), (1,1)],
@@ -57,37 +76,27 @@ class Board:
                 else:
                     self.blocked_spots.append([chr(ord(x) + (n*dx)), y+dy])
 
-            
-
-        # elif orientation == 's':
-        #     self.blocked_spots.extend([x, y+1], [x, y-size])
-
-        #     for n in range(size):
-        #         self.blocked_spots.append([x, y-n])
-        #         self.blocked_spots.append([chr(ord(x)-1), y-n])
-        #         self.blocked_spots.append([chr(ord(x)+1), y-n])
-
-
-        # elif orientation == 'w':
-        #     self.blocked_spots.extend([chr(ord(x)+1), y], [chr(ord(x)-size), y])
-
-        #     for n in range(size):
-        #         self.blocked_spots.append([chr(ord(x)-n), y]) 
-        #         self.blocked_spots.append([chr(ord(x)-n), y-1])
-        #         self.blocked_spots.append([chr(ord(x)-n), y+1])
-
-        # elif orientation == 'e':
-        #     self.blocked_spots.extend([chr(ord(x)-1), y], [chr(ord(x)+size), y])
-
-        #     for n in range(size):
-        #         self.blocked_spots.append([chr(ord(x)+n), y])
-        #         self.blocked_spots.append([chr(ord(x)+n), y-1])
-        #         self.blocked_spots.append([chr(ord(x)+n), y+1])
-        return
-
     def detect_collision(self, cords, size, orientation):
-        if self.cords_taken(cords):
-            return True
+        if self.cords_available(cords):
+            directions = {
+                'n':(0,-1),
+                's':(0,1),
+                'e':(1,0),
+                'w':(-1,0)
+            }
+            x = cords[0]
+            y = cords[1]
+            dx = directions[orientation][0]
+            dy = directions[orientation][1]
+            for n in range(1, size):
+                new_cords = [chr(ord(x)+(n*dx)), y+(n*dy)]
+                if not self.cords_available(new_cords):
+                    return True
+            return False
+        else:
+            return True 
+
+            
  
             
 
