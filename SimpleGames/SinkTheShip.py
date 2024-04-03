@@ -37,25 +37,27 @@ class Board:
         delta = 0
 
         directions = {
-            'n' : [(0,delta), (-1,delta), (1,delta)],
-            's' : [(0,-delta), (-1,-delta), (1,-delta)],
-            'w' : [(delta,0), (delta,-1), (delta, +1)],
-            'e' : [(-delta,0), (-delta,-1), (-delta, +1)]
+            'n' : [(0,-1), (-1,-1), (1,-1)],
+            's' : [(0,1), (-1,1), (1,1)],
+            'w' : [(-1,0), (-1,-1), (-1, +1)],
+            'e' : [(1,0), (1,-1), (1, 1)]
         }
 
         if orientation == 'n':
-            self.blocked_spots.extend([ [x, y-1], [x, y+size] ])
-        elif orientation == 's':
             self.blocked_spots.extend([ [x, y+1], [x, y-size] ])
+        elif orientation == 's':
+            self.blocked_spots.extend([ [x, y-1], [x, y+size] ])
         elif orientation == 'w':
             self.blocked_spots.extend([ [chr(ord(x)+1), y], [chr(ord(x)-size), y] ])
         elif orientation == 'e':
             self.blocked_spots.extend([ [chr(ord(x)-1), y], [chr(ord(x)+size), y] ])
      
-        
-        for dx, dy in directions[orientation]:
-            for n in range(size):
-                self.blocked_spots.append([chr(ord(x) + (n * dx)), y + (n * dy)])
+        for n in range(size):
+            for dx, dy in directions[orientation]:
+                if orientation == 'n' or orientation == 's':
+                    self.blocked_spots.append([chr(ord(x) + dx), y+(n*dy)])
+                else:
+                    self.blocked_spots.append([chr(ord(x) + (n*dx)), y+dy])
 
             
 
