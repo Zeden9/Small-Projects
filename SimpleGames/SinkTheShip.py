@@ -1,5 +1,6 @@
 import re 
-import os 
+import os
+from typing import List 
 
 class Ship:
     size:int
@@ -11,8 +12,6 @@ class Ship:
     sections = []
 
     def __init__(self, x, y, size, orientation):
-        if (y >= 9 or y <= 0 or ord(x) < 97 or ord(x) > 106):
-            pass
         self.x = x
         self.y = y
         self.size = size
@@ -29,14 +28,17 @@ class Ship:
         for n in range(size):
             new_cords = [chr(ord(x)+(n*dx)), y+(n*dy)]
             self.sections.append(new_cords)
-
+        os.system("cls")
         print("Ship created succesfully")
 
     
 
 class Board:
-    ships = []
+    ships: List[Ship] = []
     blocked_spots = []
+    def __init__(self):
+        self.ships = []
+        self.blocked_spots = []
 
     #def cords_beyond_border(self, cords):
 
@@ -89,18 +91,18 @@ class Board:
             dx = directions[orientation][0]
             dy = directions[orientation][1]
             for n in range(1, size):
-                new_cords = [chr(ord(x)+(n*dx)), y+(n*dy)]
+                new_x = chr(ord(x)+(n*dx))
+                new_y = y+(n*dy)
+                if(new_y > 9 or new_y < 0 or ord(new_x) < 97 or ord(new_x) > 106): #cords are not available on the board
+                    print("Out of bounds")
+                    return True
+                new_cords = [new_x, new_y]
                 if not self.cords_available(new_cords):
                     return True
             return False
         else:
             return True 
-
-            
  
-            
-
-
     def create_fleet(self):
         os.system('cls')
         BoardCreation = True
@@ -127,15 +129,40 @@ class Board:
                     new_ship = Ship(x, y, size, orientation)
                     self.block_position(new_ship)
                     self.ships.append(new_ship)
-                    print(f"\n\nShips:{self.ships}\nBlocked:{self.blocked_spots}")
+                    #print(f"\n\nShips:{self.ships}\nBlocked:{self.blocked_spots}")
+                    self.show()
                 else:
                     print("The coordinates are already taken.")
                     continue
             else:
                 print("Invalid input. Please provide coordinates and orientation in the correct format.")
                 continue
-            if (len(self.ships)) > 9: 
+            if (len(self.ships)) > 2: 
                 BoardCreation = False
+
+    def show(self):
+        print("# A B C D E F G H I J K")
+        cord_y = 97 #ascii for a
+        for x in range(10):
+            print(str(x), end="")
+            #board += str(x)
+            for y in range(10):
+                output = " *"
+                cords = [chr(cord_y+y), x]
+                for ship in self.ships:
+                    if cords in ship.sections:
+                        output = " O"
+                        #board += " O"
+                        continue
+                    elif cords in ship.sections_hit:
+                        output = " X"
+                        #board += " X"
+                print(output, end="")
+            
+            print("\n", end="")
+
+        #print(board)
+
 
 
 
@@ -157,7 +184,8 @@ def start_game():
     }
     player_board = Board()
     player_board.create_fleet()
-    print(player_board.ships)
+    #print(player_board.ships)
+    #player_board.show()
     enemy_board = Board()
 
 
@@ -189,3 +217,4 @@ Do you want to start playing? Y/N
 
 if __name__ == "__main__":
     main()
+
