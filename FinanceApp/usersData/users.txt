@@ -1,0 +1,7 @@
+1,mati,dupka
+2,dupa,dupa
+3,pawel,gnacik
+4,1,2
+5,maciek,bodzio
+6,kuba,rozpruwacz
+7,kurwa,mac

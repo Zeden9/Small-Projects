@@ -145,23 +145,19 @@ class Board:
         cord_y = 97 #ascii for a
         for x in range(10):
             print(str(x), end="")
-            #board += str(x)
             for y in range(10):
                 output = " *"
                 cords = [chr(cord_y+y), x]
                 for ship in self.ships:
                     if cords in ship.sections:
                         output = " O"
-                        #board += " O"
                         continue
                     elif cords in ship.sections_hit:
                         output = " X"
-                        #board += " X"
                 print(output, end="")
             
             print("\n", end="")
 
-        #print(board)
 
 
 
@@ -170,18 +166,6 @@ class Board:
         
         
 def start_game():
-    dictionary = {
-        "a":0,
-        "b":1,
-        "c":2,
-        "d":3,
-        "e":4,
-        "f":5,
-        "g":6,
-        "h":7,
-        "i":8,
-        "j":9,
-    }
     player_board = Board()
     player_board.create_fleet()
     #print(player_board.ships)
