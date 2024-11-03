@@ -1,6 +1,11 @@
 import re 
 import os
 from typing import List 
+import random
+
+letters_a_j = 'abcdefghij'
+numbers_0_9 = '1234567890'
+directions = 'swne'
 
 class Ship:
     size:int
@@ -34,8 +39,11 @@ class Ship:
     
 
 class Board:
+    isAlive = True
     ships: List[Ship] = []
     blocked_spots = []
+    shot_spots = [["a",5]]
+    missed_spots = [["a",6]]
     def __init__(self):
         self.ships = []
         self.blocked_spots = []
@@ -103,7 +111,7 @@ class Board:
         else:
             return True 
  
-    def create_fleet(self):
+    def create_fleet(self, isPlayer):
         os.system('cls')
         BoardCreation = True
         while BoardCreation:
@@ -119,9 +127,12 @@ class Board:
             elif(len(self.ships) > 5 and len(self.ships) <= 9): # 6 7 8 9
                 masts = "one-mast"
                 size = 1
-            prompt = f"Input coordinates and orientation of your {masts} ship (e.g. A5 N):\n"
-            data = input(prompt).lower()
-            match = re.search('[a-j][0-9][nesw]', data)
+            if(isPlayer):
+                prompt = f"Input coordinates and orientation of your {masts} ship (e.g. A5 N):\n"
+                data = input(prompt).lower()
+            else:
+                data = random.choice(letters_a_j) + random.choice(numbers_0_9) + random.choice(directions)
+            match = re.search('[a-j][0-9][nesw]', str(data))
             if match:
                 x, y, orientation = match.group().split()[0]
                 y = int(y)
@@ -137,11 +148,11 @@ class Board:
             else:
                 print("Invalid input. Please provide coordinates and orientation in the correct format.")
                 continue
-            if (len(self.ships)) > 2: 
+            if (len(self.ships)) > 9: 
                 BoardCreation = False
 
     def show(self):
-        print("# A B C D E F G H I J K")
+        print("YOUR FLEET\n# A B C D E F G H I J K")
         cord_y = 97 #ascii for a
         for x in range(10):
             print(str(x), end="")
@@ -158,7 +169,22 @@ class Board:
             
             print("\n", end="")
 
+        print("\nYOUR SHOTS\n# A B C D E F G H I J K")
+        for x in range(10):
+            print(str(x), end="")
+            for y in range(10):
+                output = " *"
+                cords = [chr(cord_y+y), x]
+                for ship in self.ships:
+                    if cords in self.shot_spots:
+                        output = " X"
+                        continue
+                    elif cords in self.missed_spots:
+                        output = " O"
+                print(output, end="")
+            print("\n", end="")
 
+    def shoot(self, enemy:Board)
 
 
 
@@ -167,10 +193,15 @@ class Board:
         
 def start_game():
     player_board = Board()
-    player_board.create_fleet()
-    #print(player_board.ships)
-    #player_board.show()
-    enemy_board = Board()
+    AIboard = Board()
+    board_decision = input("Do you want to create the board yourself [Y], or randomly generate it? [N] Y/N: ")
+    if(board_decision.lower == "n"):
+        player_board.create_fleet(False)
+    else:
+        player_board.create_fleet(True)
+    AIboard.create_fleet(False)
+
+
 
 
 def main():
