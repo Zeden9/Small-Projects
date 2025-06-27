@@ -1,1 +1,1 @@
-A place to display some projects that are too small to require a repository of their own
+A place to display some projects that I've been working on
